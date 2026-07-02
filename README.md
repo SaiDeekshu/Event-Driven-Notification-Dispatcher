@@ -1,41 +1,54 @@
-# Event-Driven-Notification-Dispatcher
+# 🚀 Event-Driven Notification Dispatcher
 
-# Event-Driven Notification Dispatcher
-
-## Project Overview
-
-The Event-Driven Notification Dispatcher is a lightweight asynchronous notification system built using **Node.js**, **Express.js**, and **SQLite**.
-
-The application exposes a REST API that accepts business events (such as `order_placed`). When an event is received, it is stored in the SQLite database, a notification task is created and added to an in-memory queue, and the API immediately returns a **202 Accepted** response. The notification is then processed asynchronously in the background without blocking the client request.
+A lightweight **asynchronous notification system** built using **Node.js**, **Express.js**, and **SQLite**. The application accepts business events through a REST API, stores them in a SQLite database, creates notification tasks, pushes them into an in-memory queue, and processes them asynchronously in the background while immediately responding to the client.
 
 ---
 
-# Tech Stack Used
+# 📌 Project Overview
 
-- **Backend Framework:** Express.js
-- **Runtime:** Node.js
-- **Database:** SQLite
-- **SQLite Package:** sqlite3
-- **Queue Mechanism:** Native JavaScript In-Memory Queue
-- **API Testing:** Thunder Client / Postman
+The Event-Driven Notification Dispatcher demonstrates an **event-driven architecture** where incoming business events are processed asynchronously.
+
+When an event is received:
+
+- ✅ Validates the incoming request
+- ✅ Stores the event in the SQLite database
+- ✅ Creates a notification record with **pending** status
+- ✅ Pushes the notification into an in-memory queue
+- ✅ Immediately returns **202 Accepted**
+- ✅ Processes notifications asynchronously in the background
+- ✅ Updates the notification status as **completed** or **failed**
 
 ---
 
-# How to Install Dependencies
+# 🛠️ Tech Stack Used
 
-Clone the repository:
+| Technology | Purpose |
+|------------|---------|
+| 🟢 Node.js | JavaScript Runtime |
+| ⚡ Express.js | Backend Framework |
+| 🗄️ SQLite | Lightweight Database |
+| 📦 sqlite3 | SQLite Driver |
+| 🔄 Native JavaScript Queue | Background Queue Processing |
+| ⏱️ setTimeout() | Simulated Notification Sending |
+| 🧪 Thunder Client / Postman | API Testing |
+
+---
+
+# 📥 How to Install Dependencies
+
+### 1️⃣ Clone the Repository
 
 ```bash
 git clone <your-github-repository-link>
 ```
 
-Navigate to the project folder:
+### 2️⃣ Navigate to the Project
 
 ```bash
 cd Event
 ```
 
-Install the required packages:
+### 3️⃣ Install Dependencies
 
 ```bash
 npm install
@@ -43,46 +56,47 @@ npm install
 
 ---
 
-# How to Set Up the SQLite Database
+# 🗄️ How to Set Up the SQLite Database
 
-The application automatically creates the SQLite database when the server starts.
+No manual database setup is required.
 
-The database schema is loaded from:
+When the application starts:
+
+- ✅ SQLite database is automatically created
+- ✅ Tables are automatically initialized using:
 
 ```
 src/db/schema.sql
 ```
 
-The following tables are created automatically:
-
-- `events`
-- `notifications`
-
-The SQLite database file is:
+Database File:
 
 ```
 events.db
 ```
 
-No additional database setup is required.
+Tables Created:
+
+- **events**
+- **notifications**
 
 ---
 
-# How to Run the Application
+# ▶️ How to Run the Application
 
-Start the application:
-
-```bash
-npm start
-```
-
-or run in development mode:
+### Development Mode
 
 ```bash
 npm run dev
 ```
 
-The server will start on:
+### Production Mode
+
+```bash
+npm start
+```
+
+Server starts on:
 
 ```
 http://localhost:3000
@@ -90,11 +104,11 @@ http://localhost:3000
 
 ---
 
-# API Endpoint Details
+# 🌐 API Endpoint Details
 
 ### Endpoint
 
-```
+```http
 POST /api/v1/events
 ```
 
@@ -106,11 +120,11 @@ http://localhost:3000/api/v1/events
 
 ### Purpose
 
-This endpoint receives a business event, stores it in the database, creates a pending notification, pushes it into an in-memory queue, and immediately returns a **202 Accepted** response while the notification is processed asynchronously.
+Accepts a business event, stores it in the database, creates a notification task, pushes it into the queue, and immediately returns **202 Accepted** while the notification is processed asynchronously.
 
 ---
 
-# Sample Request Body
+# 📤 Sample Request Body
 
 ```json
 {
@@ -124,7 +138,7 @@ This endpoint receives a business event, stores it in the database, creates a pe
 
 ---
 
-# Sample Response Body
+# 📥 Sample Response Body
 
 **Status Code**
 
@@ -145,23 +159,108 @@ This endpoint receives a business event, stores it in the database, creates a pe
 
 ---
 
-# How the Asynchronous Queue Works
+# 🔄 How the Asynchronous Queue Works
 
-The application follows an event-driven asynchronous workflow:
+The application follows an **event-driven asynchronous workflow**.
 
-1. The client sends a **POST** request to `/api/v1/events`.
-2. The request is validated.
-3. The event is stored in the **events** table.
-4. A notification record is created in the **notifications** table with the status **pending**.
-5. The notification task is added to an **in-memory queue**.
-6. The API immediately returns a **202 Accepted** response without waiting for notification processing.
-7. A background worker continuously monitors the queue.
-8. The worker picks the next notification task from the queue.
-9. Notification sending is simulated using `setTimeout()` with a random delay between **500 ms and 1000 ms**.
-10. A **10% failure rate** is simulated.
-11. The notification status is updated to:
-    - `completed`
-    - or `failed`
-12. If the notification fails, the `retry_count` is incremented in the database.
+### Workflow
 
-This asynchronous architecture ensures that the client receives a quick response while notification processing occurs independently in the background.
+1. 📩 Client sends a **POST** request.
+2. ✅ Request is validated.
+3. 🗄️ Event is stored in the **events** table.
+4. 📧 Notification record is created with **pending** status.
+5. 📥 Notification task is pushed into the in-memory queue.
+6. ⚡ API immediately returns **202 Accepted**.
+7. 🔄 Background worker continuously monitors the queue.
+8. 📤 Worker picks the next notification task.
+9. ⏱️ Notification sending is simulated using **setTimeout()** with a random delay between **500 ms and 1000 ms**.
+10. 🎲 A **10% failure rate** is simulated.
+11. 📊 Notification status is updated to:
+    - ✅ completed
+    - ❌ failed
+12. 🔁 If failed, **retry_count** is incremented.
+
+This architecture ensures the client receives a fast response while notification processing continues independently in the background.
+
+---
+
+# 📌 Assumptions
+
+- 📧 Notification channel is fixed as **email**.
+- 🗄️ SQLite is used as the local database.
+- 🔄 Queue is maintained entirely in memory.
+- ⏱️ Notification sending is simulated using **setTimeout()**.
+- 🆔 `tracking_id` is mapped to the corresponding `event_id`.
+- 👤 Each request contains a valid recipient email.
+- 🚀 Only one notification channel (**email**) is implemented.
+
+---
+
+# ⚠️ Limitations
+
+- ❌ In-memory queue data is lost if the server restarts.
+- ❌ Notification sending is simulated and does not send real emails.
+- ❌ Retry mechanism only increments **retry_count**; automatic retries are not implemented.
+- ❌ No authentication or authorization.
+- ❌ No external message broker (Redis, RabbitMQ, Kafka, etc.).
+- ❌ Designed for demonstration and local development purposes.
+
+---
+
+# ✅ Expected Workflow
+
+```text
+Client
+   │
+   ▼
+POST /api/v1/events
+   │
+   ▼
+Validate Request
+   │
+   ▼
+Store Event in SQLite
+   │
+   ▼
+Create Pending Notification
+   │
+   ▼
+Push Task to Queue
+   │
+   ├──────────────► Return 202 Accepted
+   │
+   ▼
+Background Queue Worker
+   │
+   ▼
+setTimeout()
+   │
+   ▼
+Random Delay (500–1000 ms)
+   │
+   ▼
+10% Failure Simulation
+   │
+   ▼
+Update Notification Status
+   │
+   ├──► completed
+   └──► failed
+            │
+            ▼
+Increment retry_count (on failure)
+```
+
+---
+
+# 👨‍💻 Author
+
+**Backend Engineering Assessment Submission**
+
+**Developed Using**
+
+- 🟢 Node.js
+- ⚡ Express.js
+- 🗄️ SQLite
+- 📦 sqlite3
+- 🔄 Native JavaScript Queue
