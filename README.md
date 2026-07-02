@@ -253,14 +253,4 @@ Increment retry_count (on failure)
 
 ---
 
-# 👨‍💻 Author
-
-**Backend Engineering Assessment Submission**
-
-**Developed Using**
-
-- 🟢 Node.js
-- ⚡ Express.js
-- 🗄️ SQLite
-- 📦 sqlite3
-- 🔄 Native JavaScript Queue
+e
